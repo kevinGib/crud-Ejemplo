@@ -1,0 +1,73 @@
+body{
+    background: #ceb4b4;
+}
+
+.divmain {
+    display: grid;
+    grid-template-columns: auto;
+    border-radius: 10px;
+    margin: 10% 20% 20%;
+    text-align: left;;
+  }
+
+  .divbotones{
+      text-align: left;
+      width: 100%;
+  }
+
+  .usuarios{
+    font-family: 'calibri';
+    font-size: 10px;
+    width: 100%;
+    background: rgb(210, 228, 113);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .reset{
+      width: 200px;
+      height: 35px;
+      margin: 0 auto auto;
+      background: lightsalmon;
+      border: none;
+      border-radius: 10px;
+  }
+
+  .tabla,tr{
+      border: solid 1px black;
+      padding: 0;
+  }
+
+  tr:hover td{
+      background-color: rgba(224, 172, 112, 0.781);
+      color: white;
+  }
+  
+  .titulo{
+      font-family: 'calibri';
+      font-size: 10px;
+      width: 100%;
+      background: darkseagreen;
+      margin-bottom: 10px;
+      text-align: center;
+  }
+
+  .boton{
+      width: 40%;
+  }
+
+  .registrar{
+      width: 100px;
+  }
+
+  .t{
+      font-family: 'calibri';
+      font-size: 28px;
+      color: rgb(8, 8, 8);
+  }
+
+
+  /*div:hover{
+    border: 1px solid yellow;
+  }*/
+  

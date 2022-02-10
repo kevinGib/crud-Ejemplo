@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+
+    <title>Crud</title>
+    <!-- Usando bootswatch CSS-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/pulse/bootstrap.min.css">
+    <!-- Archivo local CSS -->
+    <link rel="stylesheet" href="css-estilos.css">
+
+    <!-- Scrip para graficas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"
+        integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Scrips para pdf 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+        integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.0/html2pdf.bundle.min.js"></script>-->
+
+
+    <!-- librerias pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</head>
+
+<body>
+
+    <div class="divmain">
+        <div class="titulo">
+            <h1>CRUD javascript</h1>
+        </div>
+        <div class="usuarios">
+            <h1>Usuarios</h1>
+        </div>
+
+
+        <div class="divbotones">
+
+            <!-- BOTON PARA ABRIR EL MODAL -->
+            <button type="button" class="btn btn-success registar" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                data-bs-whatever="@mdo" id="btnRegistrarmodal">Registrar</button>
+        </div>
+        <div div clas="mb-3"><br>
+
+            <button class="btn btn-primary" onclick="buscar()" id="btnBuscar">Buscar</button>
+            <label for="">Edad Inicial</label>
+            <input type="text" name="" id="rango-inicial">
+            <label for="">Edad Final</label>
+            <input type="text" name="" id="rango-final">
+        </div>
+        <br>
+
+
+
+        <!-- boton para general pdf -->
+        <div div clas="mb-3">
+            <button class="btn btn-primary"  onclick="pdf()" id="btnCrearPdf">Crear PDF</button>
+        </div>
+        <br>
+
+        <!-- boton para graficar -->
+        <div div clas="mb-3">
+            <button class="btn btn-primary" onclick="buscar('salario')">Graficar salario</button>
+            <button class="btn btn-primary" onclick="buscar('edad')">Graficar edad</button>
+
+        </div>
+        <br>
+        <br>
+
+        <!-- canvas las  gráficas -->
+
+        <canvas id="GraficarSalario" style="border: 2px solid #000;" width="850" height="200">
+        </canvas>
+        <canvas id="GraficarEdades" style="border: 2px solid #000; margin-top: 10px;" width="850" height="200"></canvas>
+
+
+
+
+
+        <!-- modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Registro</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Formulario -->
+                        <form id="registro-form">
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">Clave:</label>
+                                <input type="text" class="form-control" id="clave" placeholder="ejemplo: 12345..."
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">Foto:</label>
+                                <br><input type="text" class="form-control" id="foto"
+                                    placeholder="Ingresa la direccion de la imagen" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">Nombre:</label>
+                                <input type="text" class="form-control" id="nombre" placeholder="Nombre" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">Edad:</label>
+                                <input type="text" class="form-control" id="edad" placeholder="Edad" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">Sexo:</label>
+                                <br> Hombre <input type="radio" name="rad" id="hombre" checked>
+                                Mujer <input type="radio" name="rad" id="mujer">
+                            </div>
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">Salario:</label>
+                                <input type="text" class="form-control" id="salario" placeholder="$..." required>
+                            </div>
+                            <!-- Boton cerrar -->
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <!-- Boton salvar -->
+                            <button class="btn btn-secondary" id="btn-task-form">SAVE</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-primary" id="btnguardar"
+                            onclick="imprimir()">Guardar</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Modal para modificar -->
+        <div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- HEADER -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modificar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <!-- BODY -->
+                    <div class="modal-body">
+                        <form id="edit-form">
+                            <div class="mb-3">
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">Clave:</label>
+                                <input type="text" class="form-control" id="modClave"
+                                    placeholder="Ingresa tu clave nueva" style="width: 60%;">
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">Fotografia:</label>
+                                <input type="text" class="form-control" id="modfoto"
+                                    placeholder="Ingresa tu url de fotografia">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">Nombre:</label>
+                                <input type="text" class="form-control" id="modNombre"
+                                    placeholder="Ingresa tu nombre"></input>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">Edad:</label>
+                                <input type="text" class="form-control" id="modEdad"
+                                    placeholder="Ingresa tu edad"></input>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">Sexo:</label>
+
+                                <label for="masc" style="margin-right: 20px;">
+                                    <input type="radio" id="modMasc" name="gen" value="masculino">
+                                    Masculino
+                                </label>
+
+                                <label for="fem">
+                                    <input type="radio" id="modFem" name="gen" value="femenino">
+                                    Femenino
+                                </label>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">Salario:</label>
+                                <input type="text" class="form-control" id="modSalario"
+                                    placeholder="Ingresa tu salario"></input>
+                            </div>
+                            <!-- Boton de cerrar -->
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <!-- Botn de guardar -->
+                            <button class="btn btn-secondary" id="btn-edit-form" value="Guardar"></button>
+                        </form>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Fin del modal para modificar  -->
+
+        <!-- MODAL PARA ELIMINAR -->
+
+        <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- HEADER -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Eliminar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <!-- BODY -->
+                    <div class="modal-body">
+                        <form action="">
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">Clave:</label>
+                                <input type="text" class="form-control" id="claveEliminar"
+                                    placeholder="Ingresa la clave">
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fin del modal para eliminar -->
+
+        <br>
+
+        <table id="idTabla" class="tituloTabla">
+            <thead>
+                <tr align="center">
+                    <th class="t">Clave</th>
+                    <th class="t">Fotografia</th>
+                    <th class="t">Nombre</th>
+                    <th class="t">Edad</th>
+                    <th class="t">Sexo</th>
+                    <th class="t">Sueldo</th>
+                    <th class="t">Opciones</th>
+                </tr>
+            </thead>
+            <tbody id="contenedor-usuarios">
+
+            </tbody>
+        </table>
+
+
+
+
+
+        <!-- <button class="btn btn-secondary">Bucar</button> -->
+
+
+        <!-- <div id="contenedor-usuarios">
+            
+        </div> -->
+
+        <!--Tabla y boton Reset  -->
+        <br><br>
+        <table id="resultadotabla" class="tabla"></table>
+        <br><br>
+        <label id="resultado"></label>
+        <!-- <input type="button" id="btnreset" class="reset" value="Reset" onclick="reset()" style="opacity: 0;"> -->
+
+
+        <!-- Agregando la base de datos -->
+        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-firestore.js"></script>
+        <!-- // https://firebase.google.com/docs/web/setup#available-libraries -->
+
+        <!-- Conectado a la base de datos -->
+        <script>
+            const firebaseConfig = {
+                apiKey: "AIzaSyCtwmx8d-WQVUopv85BoVrpYbuwGp8Abao",
+                authDomain: "crud-bcd29.firebaseapp.com",
+                databaseURL: "https://crud-bcd29-default-rtdb.firebaseio.com",
+                projectId: "crud-bcd29",
+                storageBucket: "crud-bcd29.appspot.com",
+                messagingSenderId: "733547114029",
+                appId: "1:733547114029:web:f9cf6e9995eeb4f0f112a4"
+            };
+
+            // Initializando la base de datos
+            firebase.initializeApp(firebaseConfig);
+        </script>
+
+
+
+        <!-- script con los metodos -->
+        <script src="javascript.js"></script>
+        <!--  Librerias para model-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ"
+            crossorigin="anonymous"></script>
+
+       
+
+
+</body>
+
+</html>
